@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<body>
+    <script>
+        function buscaCep({ value }) {
+            fetch(`http://viacep.com.br/ws/${value}/json`).then(response => {
+                response.json().then(json => {
+                    document.getElementById('rua').value = json.logradouro;
+                    document.getElementById('bairro').value = json.bairro;
+                    document.getElementById('uf').value = json.uf;
+                    document.getElementById('cidade').value = json.localidade;
+                });
+            });
+        }
+    </script>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <i class="circle-preloader"></i>
+        <img src="{% static 'img/core-img/load.png' %}" alt="">
+    </div>
+
+    <!-- Search Wrapper -->
+    <div class="search-wrapper">
+        <!-- Close Btn -->
+        <div class="close-btn"><i class="fa fa-times" aria-hidden="true"></i></div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <form action="#" method="post">
+                        <input type="search" name="search" placeholder="O que está procurando...">
+                        <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'partials/menu.html' %}
+    
+    
+        <div class="receipe-content-area">
+            <div class="container">
+                <form class="form-group" action="/cadastrar-endereco" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="rua">Rua</label>
+                        <input type="text" class="form-control" name="rua" id="rua"/>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="numero">Número</label>
+                            <input type="text"class="form-control" name="numero" id="numero"/>    
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="bairro">Bairro</label>
+                            <input type="text" class="form-control" name="bairro" id="bairro"/>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="complemento">Complemento</label>
+                            <input type="text" class="form-control" name="complemento" id="complemento"/>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="uf">UF</label>
+                            <input type="text" class="form-control" name="uf" id="uf"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="descricao">Descrição</label>
+                        <input type="text" class="form-control" name="descricao" id="descricao"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="cidade">Cidade</label>
+                        <input type="text" class="form-control" name="cidade" id="cidade"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="cep">CEP</label>
+                        <input type="text" class="form-control" name="cep" onblur="buscaCep(this);" id="cep"/>
+                    </div>
+                    <button type="submit" class="btn delicious-btn">Inserir Endereço</button>
+                </form>
+            </div>
+        </div>
+    {% include 'partials/footer.html' %}            
+  {% endblock %}

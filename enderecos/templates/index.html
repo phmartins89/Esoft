@@ -36,7 +36,7 @@
                     <div class="single-best-receipe-area mb-30">
                         <img src="{% static 'img/bg-img/map.png' %}" alt="">
                         <div class="receipe-content">
-                            <a href="receita.html">
+                            <a href="/cadastrar-endereco">
                                 <h5>Endereços Cadastrados</h5>
                             </a>
                         </div>
@@ -44,21 +44,42 @@
                 </div>
                         <!-- Endereços Content Area -->
                     <div class="receipe-content-area">
-                        <div class="container">
-
+                        <div class="container">                           
                             <div class="row">
                                 <div class="col-12 col-md-8">
                                     <div class="receipe-headline my-5">
-                                        <span>30 de Fevereiro, 2000</span>
-                                            <div class="receipe-duration">
-                                            <h6>RUA: </h6>
-                                            <h6>BAIRRO: </h6>
-                                            <h6>NÚMERO: </h6>
-                                            <h6>COMPLEMENTO: </h6>
-                                            <h6>DESCRIÇÃO:</h6>
-                                            <h6>CIDADE:</h6>
-                                            <h6>UF:</h6>
-                                            <h6>CEP:</h6>
+                                        {% if endereco is None %}
+                                            <p class="h4">Ainda não há nenhum endereço cadastrado!</p>
+                                        {% else %}
+                                            <table class="table">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">CEP</th>
+                                                    <th scope="col">Rua</th>
+                                                    <th scope="col">Bairro</th>
+                                                    <th scope="col">Número</th>
+                                                    <th scope="col">Complemento</th>
+                                                    <th scope="col">Descrição</th>
+                                                    <th scope="col">Cidade</th>
+                                                    <th scope="col">UF</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for endereco in enderecos %}
+                                                    <tr scope="row">
+                                                        <td>{{ endereco.cep }}</td>
+                                                        <td>{{ endereco.rua }}</td>
+                                                        <td>{{ endereco.bairro }}</td>
+                                                        <td>{{ endereco.numero }}</td>
+                                                        <td>{{ endereco.complemento }}</td>
+                                                        <td>{{ endereco.descricao }}</td>
+                                                        <td>{{ endereco.cidade }}</td>
+                                                        <td>{{ endereco.uf }}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
