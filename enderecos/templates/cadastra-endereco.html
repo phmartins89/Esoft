@@ -4,12 +4,24 @@
 <body>
     <script>
         function buscaCep({ value }) {
-            fetch(`http://viacep.com.br/ws/${value}/json`).then(response => {
+            fetch(`/recuperar-endereco?cep=${value}`).then(response => {
                 response.json().then(json => {
-                    document.getElementById('rua').value = json.logradouro;
-                    document.getElementById('bairro').value = json.bairro;
-                    document.getElementById('uf').value = json.uf;
-                    document.getElementById('cidade').value = json.localidade;
+                    if (json.length > 0) {
+                        const { fields: value } = json[0];
+                        document.getElementById('rua').value = value.rua;
+                        document.getElementById('bairro').value = value.bairro;
+                        document.getElementById('uf').value = value.uf;
+                        document.getElementById('cidade').value = value.cidade;
+                    } else {
+                        fetch(`http://viacep.com.br/ws/${value}/json`).then(response => {
+                            response.json().then(json => {
+                                document.getElementById('rua').value = json.logradouro;
+                                document.getElementById('bairro').value = json.bairro;
+                                document.getElementById('uf').value = json.uf;
+                                document.getElementById('cidade').value = json.localidade;
+                            });
+                        });
+                    }
                 });
             });
         }
@@ -45,6 +57,10 @@
                 <form class="form-group" action="/cadastrar-endereco" method="POST">
                     {% csrf_token %}
                     <div class="form-group">
+                        <label for="cep">CEP</label>
+                        <input type="text" class="form-control" name="cep" onblur="buscaCep(this);" id="cep"/>
+                    </div>
+                    <div class="form-group">
                         <label for="rua">Rua</label>
                         <input type="text" class="form-control" name="rua" id="rua"/>
                     </div>
@@ -75,10 +91,6 @@
                     <div class="form-group">
                         <label for="cidade">Cidade</label>
                         <input type="text" class="form-control" name="cidade" id="cidade"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="cep">CEP</label>
-                        <input type="text" class="form-control" name="cep" onblur="buscaCep(this);" id="cep"/>
                     </div>
                     <button type="submit" class="btn delicious-btn">Inserir Endereço</button>
                 </form>

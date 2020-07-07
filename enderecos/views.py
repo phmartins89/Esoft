@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from .models import Endereco
 from datetime import datetime
+from django.http import JsonResponse
+from django.core import serializers
+import json    
 
 
 def index(request):
@@ -9,6 +12,10 @@ def index(request):
     return render(request, 'index.html', { 
         'enderecos': enderecos 
     })
+
+def recuperar_endereco(request):
+    data = serializers.serialize("json", Endereco.objects.filter(cep=request.GET.get('cep', '')))
+    return JsonResponse(json.loads(data), safe=False)
 
 def cadastro_endereco(request):
     if request.method == 'GET':
